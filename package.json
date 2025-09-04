@@ -1,0 +1,83 @@
+{
+  "name": "idwo-mcp-server",
+  "version": "1.0.0",
+  "description": "Intelligent Development Workflow Orchestrator - MCP Server Agent for automating developer workflows across GitHub, JIRA, and Slack",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx --watch src/server.ts",
+    "start": "node dist/server.js",
+    "test": "jest",
+    "test:integration": "jest --config jest.integration.config.js",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build",
+    "docker:build": "docker build -t idwo-mcp-server .",
+    "docker:run": "docker run -p 3000:3000 idwo-mcp-server",
+    "test:apis": "node scripts/test-apis.js",
+    "test:tools": "node scripts/test-mcp-tools.js",
+    "test:all": "npm test && npm run test:apis && npm run test:tools"
+  },
+  "keywords": [
+    "mcp",
+    "server",
+    "automation",
+    "workflow",
+    "github",
+    "jira",
+    "slack",
+    "llm",
+    "ai",
+    "developer-tools"
+  ],
+  "author": "Principal Engineer",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.3",
+    "@octokit/rest": "^20.0.2",
+    "@slack/web-api": "^7.0.4",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "node-cron": "^3.0.3",
+    "openai": "^4.67.1",
+    "pg": "^8.11.3",
+    "rate-limiter-flexible": "^5.0.3",
+    "redis": "^4.6.10",
+    "winston": "^3.11.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.10.0",
+    "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.10.9",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "nock": "^13.4.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.8.1",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/idwo-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/idwo-mcp-server/issues"
+  },
+  "homepage": "https://github.com/your-username/idwo-mcp-server#readme"
+}

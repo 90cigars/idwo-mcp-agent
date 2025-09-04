@@ -1,0 +1,29 @@
+apiVersion: v2
+name: idwo
+description: Intelligent Development Workflow Orchestrator - MCP Server Agent
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - mcp
+  - workflow
+  - automation
+  - github
+  - jira
+  - slack
+  - ai
+home: https://github.com/your-org/idwo-mcp-server
+sources:
+  - https://github.com/your-org/idwo-mcp-server
+maintainers:
+  - name: IDWO Team
+    email: team@your-org.com
+dependencies:
+  - name: postgresql
+    version: 12.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: 17.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

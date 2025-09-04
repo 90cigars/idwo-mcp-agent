@@ -1,0 +1,159 @@
+# Default values for IDWO MCP Server
+replicaCount: 3
+
+image:
+  repository: idwo-mcp-server
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "3000"
+  prometheus.io/path: "/metrics"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: idwo.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - idwo
+        topologyKey: kubernetes.io/hostname
+
+# Application Configuration
+config:
+  nodeEnv: production
+  logLevel: info
+  port: 3000
+  openaiModel: "gpt-4-turbo-preview"
+  rateLimiting:
+    windowMs: 900000
+    maxRequests: 100
+  circuitBreaker:
+    timeout: 5000
+    threshold: 5
+    resetTimeout: 30000
+
+# Secrets (these should be set externally in production)
+secrets:
+  openai:
+    apiKey: ""
+  github:
+    token: ""
+    organization: ""
+  jira:
+    url: ""
+    username: ""
+    apiToken: ""
+  slack:
+    botToken: ""
+    appToken: ""
+    signingSecret: ""
+  security:
+    jwtSecret: ""
+    encryptionKey: ""
+
+# Database configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "secure-password"
+    database: "idwo"
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 250m
+      limits:
+        memory: 512Mi
+        cpu: 500m
+
+# Redis configuration
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: "secure-redis-password"
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
+
+# Monitoring
+monitoring:
+  enabled: false
+  prometheus:
+    enabled: false
+  grafana:
+    enabled: false
